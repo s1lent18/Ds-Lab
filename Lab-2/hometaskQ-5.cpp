@@ -2,73 +2,71 @@
 #include <string>
 using namespace std;
 
-void function(int * ptr, int size)
+void function(int  ptr[], int size)
 {
-    int * pointer = ptr;
+    int  pointer[size];
+
+    for(int i = 0; i < size; i++)
+    {
+        pointer[i] = ptr[i];
+    }
     
-    int min, max, n = size - 1, minindex, maxindex, temp;
+    int min, max, n = size - 1;
 
-    for (int i = 0; i < size; i++)
+    for(int i = 1; i < size; i++)
     {
-        if (ptr[i] > ptr[i + 1])
+        for(int j = 0; j < size - i; j++)
         {
-            min = ptr[i + 1];
-
-            temp = ptr[i];
-
-            break;
-        }
-    }
-
-    for(int i = n; i > 0; i--)
-    {
-        if(ptr[i] < ptr[i - 1]  && ptr[i - 1] != temp) /////
-        {
-            max = ptr[i - 1];
-        }
-    }
-
-    for (int i = 1; i < size; i++)
-    {
-        for (int j = 0; j < size - i; j++)
-        {
-            if (pointer[j] > pointer[j + 1])
+            if(pointer[j] > pointer[j + 1])
             {
                 int temp = pointer[j];
 
                 pointer[j] = pointer[j + 1];
 
                 pointer[j + 1] = temp;
-            }   
+            }
         }
     }
 
     for(int i = 0; i < size; i++)
     {
-        if (pointer[i] == min)
+        if(ptr[i] != pointer[i])
         {
-            minindex = i;
-        }
+            min = i;
 
-        if (pointer[i] == max)
+            break;
+        }
+    }   
+
+    for(int j = n; j >= 0; j--)
+    {
+        if(ptr[j] != pointer[j])
         {
-            maxindex = i;
+            max = j;
+
+            break;
         }
     }
-    
-    cout << maxindex << " --- " << minindex << endl;
-    
+
+    cout << "The subarray lies between indexes " << min << " and " << max << endl;
+
 }
 
 int main()
 {
-    int * ptr = new int[9];
+    int size;
 
-    for (int i = 0; i < 9; i++)
+    cout << "Enter the number of elements: ";
+
+    cin >> size;
+
+    int * ptr = new int[size];
+
+    for (int i = 0; i < size; i++)
     {
         cin >> ptr[i];
     }
 
-    function(ptr, 9);
+    function(ptr, size);
     
 }
