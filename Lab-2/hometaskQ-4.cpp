@@ -26,9 +26,13 @@ class Employee
         {
             for(int a = 1; a < size; a++)
             {
-                int curr = obj[a].eid, b = a - 1;
+                int currid = obj[a].eid;
+                string currf = obj[a].firstname;
+                string currl = obj[a].lastname;
+                int currage = obj[a].age;
+                int b = a - 1;
 
-                while (obj[b].eid > curr && b >= 0)                             
+                while (obj[b].eid > currid && b >= 0)                             
                 {
                     obj[b + 1].eid = obj[b].eid;
                     obj[b + 1].firstname = obj[b].firstname;
@@ -36,12 +40,17 @@ class Employee
                     obj[b + 1].age = obj[b].age;
                     b--;
                 }
-                obj[b + 1].eid = curr; 
+                obj[b + 1].eid = currid;
+                obj[b + 1].firstname = currf;
+                obj[b + 1].lastname = currl;
+                obj[b + 1].age = currage;
             }
         }
 
         void print(Employee obj[], int size)
         {
+            cout << "The Sorted List of Employees according to Their Employee ID's: " << endl << endl;
+
             for (int i = 0; i < size; i++)
             {
                 cout << "First Name: " << obj[i].firstname << endl;
@@ -58,11 +67,23 @@ int main()
 {
     srand(time(0));
 
-    //int s = (rand() % 4) += 7;
+    int input;
 
-    const int size = 3;
+    do
+    {
+        cout << "Enter the number of Employees: " << endl;
+
+        cin >> input;
+
+    } while (input < 7 || input > 10);
+
+    const int size = input;
+
+    int a = 0;
 
     Employee obj[size];
+
+    int arr[size];
 
     for (int  i = 0; i < size; i++)
     {
@@ -73,14 +94,42 @@ int main()
         cout << "Lastname: " << endl;
 
         cin >> obj[i].lastname;
-
+        
         cout << "Age: " << endl;
 
         cin >> obj[i].age;
+        
+        if(i == 0)
+        {
+            cout << "Employee ID: " << endl;
 
-        cout << "Employee ID: " << endl;
+            cin >> obj[i].eid;
 
-        cin >> obj[i].eid;
+            arr[a] = obj[i].eid;
+
+            a++;
+
+        }else
+        {
+            unique:
+                int temp;
+
+                cout << "Employee ID: " << endl;
+
+                cin >> obj[i].eid;
+
+                for (int j = 0; j < size; j++)
+                {
+                    if (arr[j] == obj[i].eid)
+                    {
+                        goto unique;
+                    }    
+                }
+                arr[a] = obj[i].eid;
+
+                a++;
+        }
+        
     }
     obj->Insertion(obj, size);
 
