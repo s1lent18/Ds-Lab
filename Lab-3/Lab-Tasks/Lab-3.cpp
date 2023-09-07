@@ -6,7 +6,7 @@ class Node
     public:
         int data;
         Node * link;
-        
+
         Node()
         {
 
@@ -17,6 +17,7 @@ class Node
             this->data = value;
             link = NULL;
         }
+
 
 };
 
@@ -44,21 +45,18 @@ class LinkedList
             }
 
             Node * temp = head;
-            
+
             while(temp->link != NULL)
             {
                 temp = temp->link;
             }
 
             temp->link = n;
+
+            tail = n;
         }
 
-        Node * gettail()
-        {
-            return tail;
-        }
-
-        void insertattailforO_1complexity(int value)
+        void insertattailwithO_1complexity(int value)
         {
             Node * n = new Node(value);
 
@@ -66,9 +64,12 @@ class LinkedList
             {
                 head = n;
                 tail = n;
+
+                return;
             }
 
             tail->link = n;
+
             tail = n;
         }
 
@@ -78,7 +79,7 @@ class LinkedList
 
             n->link = head;
 
-            head = n;    
+            head = n;
         }
 
         void deleteattail()
@@ -92,7 +93,7 @@ class LinkedList
 
             if(head->link == NULL)
             {
-                Node * del;
+                Node * del = head;
 
                 head = head->link;
 
@@ -104,41 +105,11 @@ class LinkedList
                 temp = temp->link;
             }
 
+            tail = temp;
+
+            delete temp->link;
+
             temp->link = NULL;
-        }
-
-        void deletebyindex(int index)
-        {
-            if(head  == NULL || index < 0)
-            {
-                return;
-            }
-
-            if(index == 0)
-            {
-                Node * n = head;
-
-                head = head->link;
-
-                delete n;
-            }
-
-            Node * temp = head;
-
-            int count = 0;
-
-            while(count < index - 1)
-            {
-                temp = temp->link;
-                
-                count++;
-            }
-
-            Node * del = temp->link;
-
-            temp->link = del->link;
-
-            delete del;
         }
 
         void deletebyvalue(int value)
@@ -157,12 +128,16 @@ class LinkedList
                 head = head->link;
 
                 delete del;
+
+                return;
             }
 
             while(temp->link->data != value)
             {
                 temp = temp->link;
             }
+
+            tail = temp;
 
             Node * del = temp->link;
 
@@ -171,21 +146,56 @@ class LinkedList
             delete del;
         }
 
-        void insertaftervalue(int insert, int check)
+        void deletebyindex(int index)
         {
-            Node * n = new Node(insert);
+            Node * temp = head;
+
+            if(head == NULL)
+            {
+                return;
+            }
+
+            if(head->link == NULL)
+            {
+                Node * del = head;
+
+                head = head->link;
+
+                delete del;
+
+                return;
+            }
+
+            int count = 0;
+
+            while(temp && count < index - 1)
+            {
+                count++;
+
+                temp = temp->link;
+            }
+
+            Node * del = temp->link;
+
+            temp->link = del->link;
+
+            delete del;
+        }
+
+        void insertaftervalue(int value, int valueafter)
+        {
+            Node * n = new Node(value);
 
             Node * temp = head;
 
             while(temp->link != NULL)
             {
-                if(temp->data == check)
+                if(temp->data == valueafter)
                 {
                     n->link = temp->link;
 
                     temp->link = n;
                 }
-
                 temp = temp->link;
             }
         }
@@ -194,18 +204,14 @@ class LinkedList
         {
             Node * temp = head;
 
-            int count = 0;
-
             while(temp != NULL)
             {
-                cout << "Value: " << temp->data << endl;
+                cout << "Values: " << temp->data << endl;
 
                 temp = temp->link;
             }
-            cout << endl << endl;
+            cout << endl;
         }
-
-
 };
 
 int main()
@@ -214,42 +220,52 @@ int main()
     Node * temp;
 
 // Q1[a]:
-    head->insertattail(1);
-    head->insertattail(2);
-    head->insertattail(3);
-    head->insertattail(4);
+    cout << "Insert at tail: " << endl;
+
     head->insertattail(5);
+    head->insertattail(6);
+    head->insertattail(8);
+    head->insertattail(9);
     head->display();
 
-// Q1[a] part-2:
-    // head->insertattailforO_1complexity(5);
+//Q1[a] part-2:
+    cout << "Insert at tail with O(1) complexity: " << endl;
 
-    // temp = head->gettail();
+    head->insertattailwithO_1complexity(10);
 
-    // cout << "Last Node in the linked list: " << temp->data << endl;
+    head->display();
 
-// Q1[b]:  
+// Q1[b]:
+    cout << "Insert at head: " << endl;
+
+    head->insertathead(4);
+    head->insertathead(3);
+    head->insertathead(2);
+    head->insertathead(1);
     head->insertathead(0);
-    head->insertathead(-1);
-    head->insertathead(-2);
-    head->insertathead(-3);
-    head->insertathead(-4);
     head->display();
 
 // Q2:
-    head->insertaftervalue(-2, -3);
+    cout << "Insert after value: " << endl;
+
+    head->insertaftervalue(7, 6);
     head->display();
 
 // Q3[delete last node]:
+    cout << "delete last node: " << endl;
+
     head->deleteattail();
     head->display();
 
 // Q3[delete by value]:
-    head->deletebyvalue(-2);
+    cout << "Delete after value: " << endl;
+
+    head->deletebyvalue(5);
     head->display();
 
 // Q3[delete by index]:
-    head->deletebyindex(5);
+    cout << "Delete at index: " << endl;
+
+    head->deletebyindex(3);
     head->display();
-    
 }
