@@ -54,6 +54,34 @@ class CircularLinkedList
         void insertatindex(int value, int index)
         {
             Node * n = new Node(value);
+
+            if(head == NULL)
+            {
+                head = n;
+
+                n->next = head;
+
+                return;
+            }
+
+            Node * temp = head;
+
+            int count = 0;
+
+            do
+            {
+                if(count == index - 1)
+                {
+                    n->next = temp->next;
+
+                    temp->next = n;
+                }
+
+                temp = temp->next;
+
+                count++;
+
+            }while(temp != head);
         }
 
         void insertathead(int value)
@@ -83,6 +111,31 @@ class CircularLinkedList
             head = n;
         }
 
+        void deleteatindex(int index)
+        {
+            Node * temp = head;
+
+            int count = 0;
+
+            do
+            {
+                if(count == index - 1)
+                {
+                    Node * del = temp;
+
+                    temp->next = temp->next->next;
+
+                    del = NULL;
+
+                    delete del;
+                }
+                temp = temp->next;
+
+                count++;
+
+            }while(temp != head);
+        }
+
         void display()
         {
             Node * temp = head;
@@ -105,9 +158,13 @@ int main()
     C->insertattail(1);
     C->insertattail(2);
     C->insertattail(3);
-    C->insertattail(4);
+    //C->insertattail(4);
     C->insertattail(5);
     C->insertathead(0);
+
+    C->insertatindex(4, 4);
+
+    C->deleteatindex(2);
 
     C->display();
 
