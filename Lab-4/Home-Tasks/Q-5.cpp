@@ -71,15 +71,93 @@ class DoublyLinkedList
         {
             Node * temp = head;
 
+            Node * t1;
+            Node * t2;
+            Node * t1p;
+            Node * t1n;
+            Node * t2p;
+            Node * t2n;
+
             do
             {
                 if(temp->key == index1)
                 {
-                    
+                    t1 = temp;
+
+                    t1p = temp->prev;
+
+                    t1n = temp->next;
                 }
 
+                temp = temp->next;
+
             }while(temp != head);
+
+            temp = head;
             
+            do
+            {
+                if(temp->key == index2)
+                {
+                    t2 = temp;
+
+                    t2p = temp->prev;
+
+                    t2n = temp->next;
+                }
+
+                temp = temp->next;
+
+            }while(temp != head);
+
+            t1->prev->next = t2;
+
+            t2->prev->next = t1;
+
+            t1->next->prev = t2;
+
+            t2->next->prev = t1;
+
+            t1->prev = t2p;
+
+            t1->next = t2n;
+
+            t2->prev = t1p;
+
+            t2->next = t1n;
+        }
+
+        void display()
+        {
+            Node * temp = head;
+
+            cout << endl;
+
+            do
+            {
+                cout << temp->data << "->";
+
+                temp = temp->next;
+
+            }while(temp != head);
+
+            cout << temp->data << endl << endl;
+
+            temp = head;
+
+            do
+            {
+                cout << temp->key << "->";
+
+                temp = temp->next;
+
+            }while(temp != head);
+
         }
 
 };
+
+int main()
+{
+    
+}
