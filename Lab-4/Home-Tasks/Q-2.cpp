@@ -88,7 +88,84 @@ class DoublyLinkedList
 
         void insertatindex(int value, int index)
         {
-            
+            Node * n = new Node(value);
+
+            Node * temp = head;
+
+            bool flag = false;
+
+            while(temp != NULL)
+            {
+                if(temp->key == index)
+                {
+                    n->prev = temp->prev;
+
+                    n->next = temp;
+
+                    temp->prev->next = n;
+
+                    temp->prev = n;
+
+                    n->key = temp->key;
+
+                    flag = true;
+
+                    break;
+                }
+                temp = temp->next;
+            }
+
+            if(flag)
+            {
+                do
+                {
+                    temp->key = temp->key + 1;
+                    
+                    temp = temp->next;
+
+                } while (temp != NULL);
+            }
+        }
+
+        void deleteatindex(int index)
+        {
+            Node * temp = head;
+
+            bool flag = false;
+
+            while(temp != NULL)
+            {
+                if(index == temp->key)
+                {
+                    Node * del = temp;
+                    
+                    del->prev->next = temp->next;
+
+                    temp->next->prev = del->prev;
+
+                    del = NULL;
+
+                    delete del;
+
+                    flag = true;
+
+                    break;
+                }
+                temp = temp->next;
+            }
+
+            //temp = head->next;
+
+            if(flag)
+            {
+                do
+                {
+                    temp->key = temp->key - 1;
+
+                    temp = temp->next;
+
+                } while (temp != NULL);
+            }
         }
 
         void displayforward()
@@ -124,10 +201,14 @@ int main()
     D->insertattail(1);
     D->insertattail(2);
     D->insertattail(3);
-    D->insertattail(4);
     D->insertattail(5);
+    D->insertattail(6);
 
     D->insertathead(0);
+
+    D->insertatindex(4, 4);
+
+    D->deleteatindex(2);
 
     D->displayforward();
 }

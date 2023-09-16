@@ -183,7 +183,7 @@ class DoublyLinkedList
 
                     del->prev->next = temp->next;
 
-                    temp->next->prev = temp->prev;
+                    temp->next->prev = del->prev;
 
                     del = NULL;
 
