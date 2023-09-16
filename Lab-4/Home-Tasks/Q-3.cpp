@@ -92,11 +92,10 @@ class DoublyLinkedList
 
             Node * temp = head;
 
-            do
+            while(temp->next != head)
             {
                 temp = temp->next;
-
-            }while(temp->next != head);
+            }
 
             n->next = head;
 
@@ -134,13 +133,11 @@ class DoublyLinkedList
                 return;
             }
 
-            int count = 0;
-
             bool flag = false;
 
             do
             {
-                if(count == index)
+                if(temp->key == index)
                 {
                     n->key = temp->prev->key + 1;
                     
@@ -156,8 +153,6 @@ class DoublyLinkedList
                 }
 
                 temp = temp->next;
-
-                count++;
 
             }while(temp != head);
 
@@ -176,6 +171,42 @@ class DoublyLinkedList
 
         void deleteatindex(int index)
         {
+            Node * temp = head;
+
+            bool flag = false;
+
+            do
+            {
+                if(index == temp->key)
+                {
+                    Node * del = temp;
+
+                    del->prev->next = temp->next;
+
+                    temp->next->prev = temp->prev;
+
+                    del = NULL;
+
+                    delete del;
+
+                    flag = true;
+                }
+
+                temp = temp->next;
+
+            }while(temp != head);
+
+            if(flag)
+            {
+                do
+                {
+                    temp = temp->next;
+
+                    temp->key = temp->key - 1;
+
+                } while (temp->next != head);
+            }
+
 
         }
 
@@ -221,6 +252,8 @@ int main()
     D->insertathead(0);
 
     D->insertatindex(4, 4);
+
+    D->deleteatindex(1);
 
     D->display();
 
