@@ -48,32 +48,43 @@ class LinkedList
 
         void solve()
         {
-            Node * last;
-
             Node * temp = head;
-
-            while(temp->next != NULL)
-            {
-                temp = temp->next;
-            }
-
-            last = temp;
 
             Node * change = head->next;
 
-            Node * t = head;
+            Node * second = change;
 
-            while(change != NULL && change->next != NULL)
+            Node * prev = NULL;
+
+            Node * current = second;
+
+            Node * next = NULL;
+            
+            while (change != NULL && change->next != NULL) 
             {
-                last->next = change;
-
-                last = change;
-
-                t->next = t->next->next;
-
-                change = change->next->next;
+                temp->next = temp->next->next;
+                 
+                temp = temp->next;
+                
+                change->next = change->next->next; 
+                
+                change = change->next; 
             }
-             
+
+            while (current != NULL) 
+            {
+                next = current->next;
+
+                current->next = prev;
+
+                prev = current;
+
+                current = next;
+            }
+
+            second = prev;
+
+            temp->next = second;
         }
 
         void display()
