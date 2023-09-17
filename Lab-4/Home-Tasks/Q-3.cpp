@@ -237,6 +237,19 @@ class DoublyLinkedList
             }while(temp != head);
 
         }
+
+        void displaywithindex()
+        {
+            Node * temp = head;
+
+            do
+            {
+                cout << temp->key << " --------> " << temp->data << endl;
+
+                temp = temp->next;
+
+            }while(temp != head);
+        }
 };
 
 int main()
@@ -255,6 +268,6 @@ int main()
 
     D->deleteatindex(1);
 
-    D->display();
+    D->displaywithindex();
 
 }

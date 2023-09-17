@@ -168,7 +168,7 @@ class DoublyLinkedList
             }
         }
 
-        void displayforward()
+        void display()
         {
             Node * temp = head;
 
@@ -182,15 +182,22 @@ class DoublyLinkedList
             }
 
             cout << "NULL" << endl << endl;
+        }
 
-            temp = head;
+        void displaywithindex()
+        {
+            Node * temp = head;
+
+            cout << endl;
 
             while(temp != NULL)
             {
-                cout << temp->key << ", ";
+                cout << temp->key << " ------> " << temp->data << endl;
 
-                temp = temp->next;
+                temp = temp->next; 
             }
+
+            cout << endl << endl;
         }
 };
 
@@ -210,5 +217,5 @@ int main()
 
     D->deleteatindex(2);
 
-    D->displayforward();
+    D->displaywithindex();
 }
