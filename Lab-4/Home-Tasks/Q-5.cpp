@@ -141,23 +141,28 @@ class DoublyLinkedList
 
             }while(temp != head);
 
-            cout << temp->data << endl << endl;
-
-            temp = head;
-
-            do
-            {
-                cout << temp->key << "->";
-
-                temp = temp->next;
-
-            }while(temp != head);
-
         }
 
 };
 
 int main()
 {
-    
+    DoublyLinkedList * D = new DoublyLinkedList();
+
+    D->insertattail(1);
+    D->insertattail(7);
+    D->insertattail(4);
+    D->insertattail(2);
+    D->insertattail(6);
+    D->insertattail(4);
+    D->insertattail(5);
+    D->insertattail(3);
+    D->insertattail(9);
+    D->insertattail(8);
+
+    D->display();
+
+    D->swap(3, 7);
+
+    D->display();
 }
