@@ -6,6 +6,7 @@ class Node
     public:
         int data;
         Node * next;
+        int key;
 
         Node()
         {
@@ -16,6 +17,7 @@ class Node
         {
             data = value;
             next = NULL;
+            key = 0;
         }
 };
 
@@ -34,6 +36,8 @@ class CircularLinkedList
 
                 n->next = head;
 
+                n->key = 0;
+
                 return;
             }
 
@@ -43,6 +47,8 @@ class CircularLinkedList
             {
                 temp = temp->next;
             }
+
+            n->key = temp->key + 1;
 
             temp->next = n;
 
@@ -55,33 +61,58 @@ class CircularLinkedList
         {
             Node * n = new Node(value);
 
+            bool flag = false;
+
             if(head == NULL)
             {
                 head = n;
 
                 n->next = head;
 
+                n->key = 0;
+
+                return;
+            }
+
+            if(index == 0)
+            {
+                insertathead(value);
+
                 return;
             }
 
             Node * temp = head;
 
-            int count = 0;
-
             do
             {
-                if(count == index - 1)
+                if(temp->key == index - 1)
                 {
+                    n->key = temp->key;
+
                     n->next = temp->next;
 
                     temp->next = n;
+
+                    flag = true;
+
+                    break;
                 }
 
                 temp = temp->next;
 
-                count++;
-
             }while(temp != head);
+
+            if(flag)
+            {
+                do
+                {
+                    temp = temp->next;
+                    
+                    temp->key = temp->key + 1;
+                    
+
+                } while (temp->next != head);
+            }
         }
 
         void insertathead(int value)
@@ -93,6 +124,8 @@ class CircularLinkedList
                 n->next = head;
                 
                 head = n;
+
+                n->key = 0;
 
                 return;
             }
@@ -108,6 +141,18 @@ class CircularLinkedList
 
             n->next = head;
 
+            n->key = 0;
+
+            temp = head;
+
+            do
+            {
+                temp->key = temp->key + 1;
+
+                temp = temp->next;
+
+            }   while(temp->next != head);
+
             head = n;
         }
 
@@ -115,11 +160,11 @@ class CircularLinkedList
         {
             Node * temp = head;
 
-            int count = 0;
+            bool flag = false;
 
             do
             {
-                if(count == index - 1)
+                if(temp->key == index - 1)
                 {
                     Node * del = temp;
 
@@ -128,12 +173,25 @@ class CircularLinkedList
                     del = NULL;
 
                     delete del;
+
+                    flag = true;
+
+                    break;
                 }
                 temp = temp->next;
 
-                count++;
-
             }while(temp != head);
+
+            if(flag)
+            {
+                do
+                {
+                    temp = temp->next;
+
+                    temp->key = temp->key - 1;
+
+                } while (temp->next != head);
+            }
         }
 
         void display()
@@ -148,6 +206,19 @@ class CircularLinkedList
 
             } while (temp != head);
             
+        }
+
+        void displaywithindex()
+        {
+            Node * temp = head;
+
+            do
+            {
+                cout << temp->key << " --------> " << temp->data << endl;
+
+                temp = temp->next;
+
+            } while(temp != head);
         }
 };
 
@@ -166,7 +237,7 @@ int main()
 
     C->deleteatindex(2);
 
-    C->display();
+    C->displaywithindex();
 
 
 }
