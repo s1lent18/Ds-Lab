@@ -50,103 +50,64 @@ class LinkedList
             temp = n;
         }
 
-        void getsize()
+        void sort()
         {
+            Node * next = NULL;
+
             Node * temp = head;
 
-            size = 0;
+            bool flag = false;
 
             while(temp != NULL)
             {
-                size += 1;
-                
-                temp = temp->next;
-            }
-        }
-
-        void sort()
-        {
-            bool flag = false;
-
-            Node * prev = NULL;
-            
-            Node * temp = head;
-
-            Node * next = head->next;
-            cout << "outside whike";
-            while(temp->next != NULL)
-            {
-                cout << "wgile\n";
-                if(temp->data > next->data)
+                if(temp->next == NULL)
                 {
-                    flag = true;
+                    break;
+                }
+                else if(temp->data > temp->next->data)
+                {
+                    Node * prev = temp->next;
 
-                    if(temp == head)
+                    temp->next = prev->next;
+
+                    prev->next = temp;
+
+                    if(next == NULL)
                     {
-                        temp->next = next->next;
-
-                        //next->next = temp;
-
-                        prev = next;
-
-                        prev->next = temp;
-
                         head = prev;
-
-                        // temp = temp->next;
-
-                        next = temp->next;
                     }
                     else
                     {
-                        temp->next = next->next;
-
-                        next->next = temp;
-                        
-                        
-                        prev = next;
-
-                        if(prev != NULL)
-                        {
-                            prev->next = next;
-                        }
-                        next = temp->next;
-
-                        prev = prev->next;
+                        next->next = prev;
                     }
-                    
+                    flag = true;   
                 }
-                else
-                {
-                    prev = temp;
-                    if(prev != NULL)
-                    {
-                        prev = prev->next;
-                        
-                    }
+                next = temp;
 
-                    temp = temp->next;
-
-                    next = next->next;
-                
-                }
+                temp = temp->next;
             }
-               
+
+            if(flag)
+            {
+                sort();
+            }
         }
 
         void display()
         {
             Node * temp = head;
 
+            cout << endl;
+
             while(temp != NULL)
             {
-                cout << "Values: " << temp->data << endl;
+                cout << temp->data << " -> " ;
 
                 temp = temp->next;
             }
 
-            cout << endl << endl;
-        }    
+            cout << "NULL" << endl << endl;
+        }
 };
 
 int main()
@@ -155,16 +116,13 @@ int main()
 
     T->insertattail(2);
     T->insertattail(1);
-    T->insertattail(3);
     T->insertattail(4);
+    T->insertattail(3);
     T->insertattail(0);
 
     T->display();
 
-    for(int i = 0; i < 5; i++)
-    {
-        T->sort();
-    }
+    T->sort();
 
     T->display();
 }
