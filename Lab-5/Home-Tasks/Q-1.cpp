@@ -57,57 +57,62 @@ class LinkedList
             tail = n;
         }
 
-        void evenodd()
+        void evenodd(Node *& temp, Node *& prev, int firstodd, int count)
         {
-            Node * temp = head->next;
+            //int firstodd = 0, count = 0;
 
-            Node * prev = head;
-
-            bool flag = false;
-
-            while(temp != NULL)
+            if(firstodd == temp->data)
             {
-                cout << "While";
-
-                if(temp->data % 2 != 0)
-                {
-                    flag = true;
-
-                    cout << "true";
-
-                    if(prev == head)
-                    {
-                        cout << "Hi";
-                        prev->next = tail->next;
-
-                        tail->next = prev;
-
-                        head = temp;
-
-                        prev = temp;
-
-                        temp = temp->next;
-
-                        display();
-                    }   
-                    // else
-                    // {
-                    //     temp->next = tail->next;
-                        
-                    //     tail->next = temp;
-
-                    //     prev->next = temp->next;
-
-                    //     prev = prev->next->next;
-                    // }
-                }
-                // else
-                // {
-                //     temp = temp->next;
-
-                //     prev = prev->next;
-                // }
+                return;
             }
+
+            if(temp->data % 2 != 0)
+            {
+                if(count == 0)
+                {
+                    firstodd = temp->data;
+                }
+
+                count++;
+
+                insertattail(temp->data);
+
+                if(temp == head)
+                {
+                    head = temp->next;
+                    
+                    temp = NULL;
+
+                    temp = head;
+
+                }
+                else
+                {
+                    prev->next = temp->next;
+
+                    temp = NULL;
+
+                    temp = prev->next;
+                }
+                display();
+            }
+            else
+            {
+                prev = temp;
+
+                temp = temp->next;
+            }
+            
+            evenodd(temp, prev, firstodd, count);
+        }
+
+        void change()
+        {
+            Node * temp = head;
+
+            Node * prev = NULL;
+
+            evenodd(temp, prev, 0, 0);
         }
 
         void display()
@@ -123,7 +128,7 @@ class LinkedList
                 temp = temp->next;
             }
 
-            cout << " NULL" << endl << endl;
+            cout << "NULL" << endl << endl;
         }
 };
 
@@ -138,7 +143,9 @@ int main()
     L->insertattail(5);
     L->insertattail(6);
 
-    L->evenodd();
+    L->display();
+
+    L->change();
 
     L->display();
 }
