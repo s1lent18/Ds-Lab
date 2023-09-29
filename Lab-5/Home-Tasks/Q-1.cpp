@@ -138,8 +138,8 @@ int main()
 
     L->insertattail(1);
     L->insertattail(2);
-    L->insertattail(3);
     L->insertattail(4);
+    L->insertattail(3);
     L->insertattail(5);
     L->insertattail(6);
 
