@@ -80,15 +80,13 @@ float calculateuniformity(int * arr, int max)
         }
     }
 
-    cout << maximum;
-
-    for(int i = 0; i < 1000; i++)
+    for(int i = 1; i < 101; i++)
     {
         count = 0;
 
         for(int j = 0; j < 1000; j++)
         {
-            if(arr[i] == arr[j])
+            if(i == arr[j])
             {
                 count++;
             }
@@ -96,6 +94,7 @@ float calculateuniformity(int * arr, int max)
 
         deviation += (maximum - count);
     }
+    
     return deviation / max;
 }
 
