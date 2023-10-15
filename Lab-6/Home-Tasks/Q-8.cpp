@@ -59,17 +59,43 @@ float calculateuniformity(int * arr, int max)
 {
     float deviation = 0.0f;
 
-    for(int i = 0; i < 101; i++)
+    int maximum = 0;
+
+    int count = 0;
+
+    for(int i = 0; i < 1000; i++)
     {
+        count = 0;
+
         for(int j = 0; j < 1000; j++)
         {
-            if(i == arr[j])
+            if(arr[i] == arr[j])
             {
-                deviation += 1;
+                count++;
             }
+        }
+        if(count > maximum)
+        {
+            maximum = count;
         }
     }
 
+    cout << maximum;
+
+    for(int i = 0; i < 1000; i++)
+    {
+        count = 0;
+
+        for(int j = 0; j < 1000; j++)
+        {
+            if(arr[i] == arr[j])
+            {
+                count++;
+            }
+        }
+
+        deviation += (maximum - count);
+    }
     return deviation / max;
 }
 
@@ -135,10 +161,10 @@ int main()
 
     bubblesort(arr, size);
 
-    for(int i = 0; i < 1000; i++)
-    {
-        cout << arr[i] << endl;
-    }
+    // for(int i = 0; i < 1000; i++)
+    // {
+    //     cout << arr[i] << endl;
+    // }
 
     cout << "The Uniformity value of the array is " << calculateuniformity(arr, max) << endl;
 
