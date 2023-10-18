@@ -59,68 +59,61 @@ class Stack
             return top == -1;
         }
 
-        string print()
-        {
-            string prin;
-
-            for(int i = 0; i < size; i++)
-            {
-                prin += Top();
-
-                pop();
-            }
-            return prin;
-        }
-
-
 };
 
-void postfix(char * input)
+bool checkpre(char op)
 {
-    string a = input;
+    if(op == '+' || op == '-')
+    {
+        return 0;
+    }
+    else if(op == '*' || op == '/')
+    {
+        return 1;
+    }
+}
 
-    Stack S(a.length());
+string postfix(string input)
+{
+    Stack S(input.length());
 
-    bool flag = false;
-    char op;
+    string convert;
 
-    for(int i = 0; i < a.length(); i++)
+    for(int i = 0; i < input.length(); i++)
     {
         if(input[i] >= 'a' && input[i] <= 'z')
         {
+            convert += input[i];
+        }
+        else if(input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/')
+        {
             S.push(input[i]);
-            if(flag == true)
+        }
+        else if(input[i] == '(')
+        {
+            S.push(input[i]);
+        }
+        else if(input[i] == ')')
+        {
+            while(!S.empty() && S.Top() != '(')
             {
-                flag = false;
-                S.push(op);
+                convert += S.Top();
+                S.pop();
             }
-        }
-        else if(input[i] == '(' || input[i] == ')')
-        {
-            continue;
-        }
-        else
-        {
-            op = input[i];
-            flag = true;
+            S.pop();
         }
     }
 
-    string p =  S.print();
-
-    for(int i = p.size() - 1; i >= 0; i--)
+    while(!S.empty())
     {
-        cout << p[i];
+        convert += S.Top();
+        S.pop();
     }
+    return convert;
 }
 
 int main()
 {
-    char * n = new char[7];
-    
-    for(int i = 0; i < 7; i++)
-    {
-        cin >> n[i]; 
-    }
-    postfix(n);
+    string input = "((a+b)*c)-d";
+    cout << postfix(input) << endl;
 }
