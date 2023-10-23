@@ -185,13 +185,21 @@ int checkpre(char op)
     {
         return 1;
     }
+    else if(op == '(' || op == ')')
+    {
+        return 2;
+    }
+    else if(op == '{' || op == '}')
+    {
+        return 3;
+    }
     else
     {
         return -1;
     }
 }
 
-string prefix(string input)
+void prefix(string input, Stackc & forreturn)
 {
     string convert = "";
 
@@ -202,29 +210,24 @@ string prefix(string input)
         if(input[i] >= '0' && input[i] <= '9')
         {
             convert += input[i];
-        }
-        else if(input[i] == '}')
-        {
-            S.push(input[i]);
+            forreturn.push(input[i]);
         }
         else if(input[i] == '{')
         {
             while(!S.isempty() && S.Top() != '}')
             {
                 convert += S.Top();
+                forreturn.push(S.Top());
                 S.pop();
             }
             S.pop();
-        }
-        else if(input[i] == ')')
-        {
-            S.push(input[i]);
         }
         else if(input[i] == '(')
         {
             while(!S.isempty() && S.Top() != ')')
             {
                 convert += S.Top();
+                forreturn.push(S.Top());
                 S.pop();
             }
             S.pop();
@@ -234,8 +237,11 @@ string prefix(string input)
             while(!S.isempty() && (checkpre(S.Top()) >= checkpre(input[i])))
             {
                 convert += S.Top();
+                forreturn.push(S.Top());
                 S.pop();
             }
+            forreturn.push(',');
+            //forreturn.push(input[i]);
             S.push(input[i]);
         }
     }
@@ -243,22 +249,46 @@ string prefix(string input)
     while(!S.isempty())
     {
         convert += S.Top();
+        forreturn.push(S.Top());
         S.pop();
     }
     
-    return convert;
+    reverse(convert.begin(), convert.end());
+
+    cout << convert << endl;
+
+    while(!forreturn.isempty())
+    {
+        cout << forreturn.Top();
+        forreturn.pop();
+    }
+
 }
 
-int prefixcalculation(string input)
+int prefixcalculation(Stackc & in)
 {
     Stacki S;
 
-    for(int i = input.length() - 1; i >= 0; i--)
+    while(!in.isempty())
     {
-        if(input[i] >= '0' && input[i] <= '9')
+        char check = in.Top();
+
+        int count = 1;
+
+        int p = 0, a = 0;
+
+        if(check >= '0' && check <= '9')
         {
-            S.push(input[i] - '0');
+            p = check - '0';
+
+            a += (p * count);
+
+            count *= 10;
         }
+        else if(check == ',')
+        {
+            S.push(a);
+        } 
         else
         {
             int op1 = S.Top();
@@ -267,40 +297,38 @@ int prefixcalculation(string input)
             int op2 = S.Top();
             S.pop();
 
-            switch (input[i])
+            switch (check)
             {
-            case '+':
-                S.push(op1 + op2);
-                break;
-            
-            case '-':
-                S.push(op1 - op2);
-                break;
+                case '+':
+                    S.push(op1 + op2);
+                    break;
+                
+                case '-':
+                    S.push(op1 - op2);
+                    break;
 
-            case '*':
-                S.push(op1 * op2);
-                break;
+                case '*':
+                    S.push(op1 * op2);
+                    break;
 
-            case '/':
-                S.push(op1 / op2);
-                break;
+                case '/':
+                    S.push(op1 / op2);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
             }
         }
+        in.pop();
     }
-
     return S.Top();
 }
 
 int main()
 {
-    string input = "{11+22-(3*4-7)*5}-127";
-    
-    string ans = prefix(input);
+    Stackc forreturn;
 
-    reverse(ans.begin(), ans.end());
-    
-    cout << prefixcalculation(ans);
+    prefix("{11+22-(3*4-7)*5}-127", forreturn);
+
+    cout << endl << prefixcalculation(forreturn) << endl;
 }
