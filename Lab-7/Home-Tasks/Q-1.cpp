@@ -161,7 +161,10 @@ class Stacki
 
         int Top()
         {
-            return L1->last();
+            if(L1->head != NULL)
+            {
+                return L1->last();
+            }
         }
 
         bool isempty()
@@ -214,6 +217,10 @@ string prefix(string input)
         }
         else if(input[i] == '{')
         {
+            if(!S.isempty() && S.Top() != '}')
+            {
+                cal += ',';
+            }
             while(!S.isempty() && S.Top() != '}')
             {
                 convert += S.Top();
@@ -224,6 +231,10 @@ string prefix(string input)
         }
         else if(input[i] == '(')
         {
+            if(!S.isempty() && S.Top() != ')')
+            {
+                cal += ',';
+            }
             while(!S.isempty() && S.Top() != ')')
             {
                 convert += S.Top();
@@ -234,6 +245,10 @@ string prefix(string input)
         }
         else if(input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/')
         {
+            if(!S.isempty() && (checkpre(S.Top()) >= checkpre(input[i])))
+            {
+                cal += ",";
+            }
             while(!S.isempty() && (checkpre(S.Top()) >= checkpre(input[i])))
             {
                 convert += S.Top();
@@ -256,7 +271,6 @@ string prefix(string input)
     reverse(cal.begin(), cal.end());
 
     return cal;
-
 }
 
 int prefixcalculation(string cal)
@@ -267,8 +281,7 @@ int prefixcalculation(string cal)
 
     for(int i = cal.size() - 1; i >= 0; i--)
     {
-        cout << cal[i];
-
+        //cout << cal[i];
         if(cal[i] >= '0' && cal[i] <= '9')
         {
             p = cal[i] - '0';
@@ -279,7 +292,10 @@ int prefixcalculation(string cal)
         }
         else if(cal[i] == ',')
         {
-            S.push(a);
+            if(a != 0)
+            {
+                S.push(a);
+            }
             count = 1;
             a = 0;
         }
@@ -314,13 +330,12 @@ int prefixcalculation(string cal)
             }
         }
     }
+
     return S.Top();
 }
 
 int main()
 {
-    Stackc forreturn;
-
     string c = prefix("{11+22-(3*4-7)*5}-127");
 
     cout << endl << prefixcalculation(c) << endl;
