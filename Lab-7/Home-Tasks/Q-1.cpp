@@ -202,6 +202,23 @@ int checkpre(char op)
     }
 }
 
+string Prefix(string input)
+{   
+    Stackc operands;
+
+    Stackc operators;
+
+    for(int i = input.size() - 1; i >= 0; i--)
+    {
+        if(input[i] >= '0' && input[i] <= '9')
+        {
+            operands.push(input[i]);
+        }
+    }
+
+
+}
+
 string prefix(string input)
 {
     string convert = "";
@@ -281,7 +298,6 @@ int prefixcalculation(string cal)
 
     for(int i = cal.size() - 1; i >= 0; i--)
     {
-        //cout << cal[i];
         if(cal[i] >= '0' && cal[i] <= '9')
         {
             p = cal[i] - '0';
