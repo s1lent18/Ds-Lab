@@ -162,7 +162,6 @@ class BT
         }
 };
 
-
 bool FBT(Node *& head)
  {
     if(head == NULL) 
@@ -178,6 +177,94 @@ bool FBT(Node *& head)
         return FBT(head->left) && FBT(head->right);
     }
     return false;
+}
+
+int height(Node *& root)
+{
+    if(root == NULL)
+    {
+        return 0;
+    }
+
+    int leftH = height(root->left);
+    int rightH = height(root->right);
+
+    return max(leftH, rightH) + 1;
+}
+
+bool PBT(Node *& root, int depth, int level)
+{   
+    if(root == NULL)
+    {
+        return 1;
+    }
+
+    if(root->left == NULL && root->right == NULL)
+    {
+        if(depth == level)
+        {
+            return 1;
+        }
+        return 0;
+    }
+
+    return PBT(root->left, depth, level + 1) && PBT(root->right, depth, level + 1);
+}
+
+// considering that the minimum value that can be stored in the tree is -1
+// considering that the maximum value that can be stored in the tree is 1000
+
+bool BST(Node *&root, int min = -1, int max = 1000)
+{
+    if(root == NULL)
+    {
+        return true;
+    }
+
+    if(root->data <= min || root->data >= max)
+    {
+        return false;
+    }
+
+    return BST(root->left, min, root->data) && BST(root->right, root->data, max);
+}
+
+bool CBT(Node *& root)
+{
+    if(root == NULL)
+    {
+        return true;
+    }
+
+    Queue Q;
+
+    bool flag = 0;
+
+    Q.enqueue(root);
+
+    Node * temp;
+
+    while(!Q.isempty())
+    {
+        temp = Q.Top();
+        Q.dequeue();
+
+        if(temp == NULL)
+        {
+            flag = 1;
+        }
+        else
+        {
+            if(flag)
+            {
+                return false;
+            }
+        }
+
+        Q.enqueue(root->left);
+        Q.enqueue(root->right);
+    }
+    return true;
 }
 
 int main()
@@ -197,5 +284,34 @@ int main()
     else
     {
         cout << "Not full binary tree " << endl;
+    }
+
+    int d = height(B->root);
+
+    if(PBT(B->root, d, 0))
+    {
+        cout << "Perfect Binary Tree" << endl;
+    }
+    else
+    {
+        cout << "Not Perfect binary tree " << endl;
+    }
+
+    if(BST(B->root))
+    {
+        cout << "Binary Search Tree" << endl;
+    }
+    else
+    {
+        cout << "Not binary search tree " << endl;
+    }
+
+    if(CBT(B->root))
+    {
+        cout << "Complete Binary Tree" << endl;
+    }
+    else
+    {
+        cout << "Not Complete binary tree " << endl;
     }
 }
