@@ -145,62 +145,56 @@ class Tree
 		
 		    return root;
 		}
-		
-		void inorder(Node * n)
-		{
-		    if(n == NULL)
-		    {
-		        return;
-		    }
-		
-		    inorder(n->left);
-		    cout << n->data << " ";
-		    inorder(n->right);
-		}
 
-		void preorder(Node * n)
+		int kthminvalue(Node * root, int k)
 		{
-			if(n == NULL)
+			if(root == NULL)
 			{
-				return;
+				return 0;
 			}
 
-			cout << n->data << " ";
-			
-			preorder(n->left);
-			
-			preorder(n->right);
+			int l = getheight(root->left) + 1;
+
+			if(k == l)
+			{
+				return root->data;
+			}
+			else if(k < l)
+			{
+				return kthminvalue(root->left, k);
+			}
+			else
+			{
+				return kthminvalue(root->right, k - l);
+			}
 		}
 
-		void postorder(Node * n)
+		int kthmaxvalue(Node * root, int k)
 		{
-			if(n == NULL)
+			if(root == NULL)
 			{
-				return;
+				return 0;
 			}
 
-			postorder(n->left);			
-	
-			postorder(n->right);
-			cout << n->data << " ";
+			int r = getheight(root->right) + 1;
+
+			if(k == r)
+			{
+				return root->data;
+			}
+			else if(k < r)
+			{
+				return kthminvalue(root->right, k);
+			}
+			else
+			{
+				return kthminvalue(root->left, k - r);
+			}
 		}
 			
 };
 
-int kthminvalue(Node * root, int k)
-{
-    if(root->height > 3)
-    {
-        if(root->height % 2 == 0)
-        {
-            int temp = root->height - k;
-        }
-        else
-        {
 
-        }
-    }
-}
 
 int main()
 {
@@ -211,9 +205,6 @@ int main()
 		T->root = T->insert(T->root, i);
 	}
 
-    T->inorder(T->root);
-	cout << endl;
-	T->preorder(T->root);
-	cout << endl;
-	T->postorder(T->root); 
+	cout << T->kthminvalue(T->root, 2) << endl;
+	cout << T->kthmaxvalue(T->root, 2);
 }
