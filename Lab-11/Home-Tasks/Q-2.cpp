@@ -1,97 +1,374 @@
 #include <iostream>
 using namespace std;
 
-class Hash
+class Node
 {
     public:
-        int data;
-        int key;
+        char data;
+        Node * next;
+
+        Node()
+        {
+
+        };
+
+        Node(char data)
+        {
+            this->data = data;
+            next = NULL;
+        }
 };
 
-class Map
+class Stack
 {
-    public:
+    private:
+        char * arr;
+        int top;
         int size;
-        Hash * arr;
-        
-        Map(int size)
-        {
-            this->size = size;;
-            arr = new Hash[size];
 
-            for(int i = 0; i < size; i++)
-            {
-                arr[i].key = -1;
-                arr[i].data = 0;     
-            }
+    public:
+        Stack(int size)
+        {
+            this->size = size;
+            arr = new char[size];
+            top = -1;
         }
 
-        void insert(int key)
+        void push(char data)
         {
-            int index = key % size;
-
-            while(arr[index].key != -1)
+            if(top == size - 1)
             {
-                index = (index + 1) % size;
+                cout << "Stack Overflow" << endl;
+
+                return;
             }
 
-            arr[index].key = key;
-            arr[index].data++;
+            top += 1;
+
+            arr[top] = data;
         }
 
-        int input(int key) 
+        void pop()
         {
-            int index = key % size;
-
-            while (arr[index].key != key && arr[index].key != -1) 
+            if(top == -1)
             {
-                index = (index + 1) % size;
+                cout << "Stack Empty" << endl;
+
+                return;
             }
 
-            return arr[index].data;
-        }     
+            top -= 1;
+        }
+
+        char Top()
+        {
+            return arr[top];
+        }
+
+        bool isempty()
+        {
+            return top == -1;
+        }
 };
 
-int Q2(int * arr, int size, int k)
+class Queue
 {
-    Map H(size);
+    private:
+        char * arr;
+        int front;
+        int back;
+        int size;
 
-    int ans = 0;
+    public:
+        Queue(int size)
+        {
+            this->size = size;
+            arr = new char[size];
+            front = -1;
+            back = -1;
+        }
 
-    for(int i = 0; i < size; i++)
-    {
-        int difference = k - arr[i];
+        void enqueue(char data)
+        {
+            if(back == size - 1)
+            {
+                cout << "Queue OverFlow" << endl;
 
-        ans += H.input(difference);
+                return;
+            }
 
-        H.insert(arr[i]);
-    }
+            back += 1;
 
-    return ans;
-}
+            arr[back] = data;
 
-int main() 
+            if(front == -1)
+            {
+                front++;
+            }
+        }
+
+        void dequeue()
+        {
+            if(front == -1 || front > back)
+            {
+                cout << "Queue Empty" << endl;
+
+                return;
+            }
+
+            front += 1;
+        }
+
+        char peek()
+        {
+            if(front == -1 || front > back)
+            {
+                cout << " Queue Empty " << endl;
+
+                return ' ';
+            }
+
+            return arr[front];
+        }
+
+        bool isempty()
+        {
+            if(front == -1 || front > back)
+            {
+                return 1;
+            }
+            return 0;
+        }
+};
+
+class HashTable
 {
-    int size = 0;
+    public:
+        Node * Table[26];
 
-    int k = 0;
+        int HashFormula(char vertex)
+        {
+            return (vertex % 97);
+        }
 
-    cout << "Enter the size of the array and k: ";
-    
-    cin >> size >> k;
+        void vertexInsertion(char data)
+        {
+            Node * n = new Node(data);
 
-    int * array = new int[size];
+            int index = HashFormula(data);
 
-    for(int i = 0; i < size; i++)
-    {
-        cout << "Enter " << i << " th Element: ";
+            if(Table[index] == NULL)
+            {
+                Table[index] = n;
+                Table[index]->next = NULL;
+            }
+            else
+            {
+                Node * temp = Table[index];
 
-        cin >> array[i];
-    }
+                while(temp->next != NULL)
+                {
+                    temp = temp->next;
+                }
 
-    int ans = Q2(array, size, k);
+                temp->next = n;
+            }
+        }
 
-    cout << "Number of pairs with sum " << k << ": " << ans << endl;
+        void edgeconnection(char source, char destination)
+        {
+            Node * newDes = new Node(destination);
 
-    return 0;
+            int index = HashFormula(source);
+
+            Node * temp = Table[index];
+
+            while(temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+
+            temp->next = newDes;
+
+            Node * s = new Node(source);
+
+            int index2 = HashFormula(destination);
+
+            temp = Table[index2];
+
+            while(temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+
+            temp->next = s;
+        }
+
+        bool check(char arr[], char ch)
+        {
+            for(int i = 0; i < 26; i++)
+            {
+                if(arr[i] == ch)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        void DFS()
+        {
+            Stack S(26);
+            
+            Node * temp;
+
+            char visited[26] = {'#'};
+            
+            int index = 0;
+
+            temp = Table[0];
+
+            visited[index] = temp->data;
+
+            index += 1;
+
+            while(temp != NULL)
+            {
+                S.push(temp->data);
+
+                temp = temp->next;
+            }
+
+            while(!S.isempty())
+            {
+                char p = S.Top();
+                S.pop();
+
+                if(check(visited, p))
+                {
+                    visited[index] = p;
+
+                    index ++;
+
+                    for(int i = 0; i < 26; i++)
+                    {
+                        if(Table[i]->data == p)
+                        {
+                            temp = Table[i];
+
+                            while(temp != NULL)
+                            {
+                                S.push(temp->data);
+
+                                temp = temp->next;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0; i < 26; i++)
+            {
+                if(visited[i] >= 'a' && visited[i] <= 'z')
+                {
+                    cout << visited[i] << " -> ";
+                }
+            }
+            
+        }
+
+        void BFS()
+        {
+            Queue Q(26);
+
+            Node * temp;
+
+            char visited[26] = {'#'};
+            
+            int index = 0;
+
+            temp = Table[0];
+
+            visited[index] = temp->data;
+
+            index += 1;
+
+            while(temp != NULL)
+            {
+                Q.enqueue(temp->data);
+
+                temp = temp->next;
+            }
+
+            while(!Q.isempty())
+            {
+                char p = Q.peek();
+                Q.dequeue();
+
+                if(check(visited, p))
+                {
+                    visited[index] = p;
+
+                    index ++;
+
+                    for(int i = 0; i < 26; i++)
+                    {
+                        if(Table[i]->data == p)
+                        {
+                            temp = Table[i];
+
+                            while(temp != NULL)
+                            {
+                                Q.enqueue(temp->data);
+
+                                temp = temp->next;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for(int i = 0; i < 26; i++)
+            {
+                if(visited[i] >= 'a' && visited[i] <= 'z')
+                {
+                    cout << visited[i] << " -> ";
+                }
+            }
+        }
+};
+
+int main()
+{
+    HashTable T;
+
+    T.vertexInsertion('a');
+    T.vertexInsertion('b');
+    T.vertexInsertion('c');
+    T.vertexInsertion('d');
+    T.vertexInsertion('e');
+    T.vertexInsertion('e');
+    T.vertexInsertion('f');
+
+    T.edgeconnection('a', 'b');
+    T.edgeconnection('a', 'c');
+    T.edgeconnection('b', 'c');
+    T.edgeconnection('b', 'd');
+    T.edgeconnection('b', 'e');
+    T.edgeconnection('c', 'd');
+    T.edgeconnection('c', 'f');
+    T.edgeconnection('d', 'e');
+    T.edgeconnection('d', 'f');
+    T.edgeconnection('e', 'e');
+    T.edgeconnection('e', 'f');
+    T.edgeconnection('f', 'e');
+
+    T.DFS();
+
+    cout << endl << endl;
+
+    T.BFS();
+
 }

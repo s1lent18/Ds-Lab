@@ -17,7 +17,7 @@ class HashTable
             }
         }
 
-        int count(char key)
+        int func(char key)
         {
             return arr[key - 'A'];
         }
@@ -44,7 +44,7 @@ string Q4(string s, string t)
     {
         S.arr[s[b] - 'A']++;
 
-        if(T.count(s[b]) > 0 && S.count(s[b]) <= T.count(s[b]))
+        if(T.func(s[b]) > 0 && S.func(s[b]) <= T.func(s[b]))
         {
             count--;
         }
@@ -61,7 +61,7 @@ string Q4(string s, string t)
                 temp = a; 
             }
 
-            if (T.count(s[a]) > 0 && S.count(s[a]) < T.count(s[a]))
+            if (T.func(s[a]) > 0 && S.func(s[a]) < T.func(s[a]))
             {
                 count++;
             }
