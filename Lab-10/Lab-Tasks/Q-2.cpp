@@ -203,5 +203,5 @@ int main()
     b->Insertion(4);
     b->Insertion(5);
 
-    cout << b->checkmaxheap(b->root);
+    cout << b->checkminheap(b->root);
 }
