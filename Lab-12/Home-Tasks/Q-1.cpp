@@ -1,11 +1,33 @@
 #include <iostream>
 #include <stack>
+#include <queue>
 using namespace std;
+
+class Node
+{
+    public:
+        int weight;
+        char name;
+        const int size = 26;
+        Node * next;
+
+        Node()
+        {
+            next = NULL;
+        };
+
+        Node(char name, int weight)
+        {
+            this->name = name;
+            this->weight = weight;
+            next = NULL;
+        }     
+};
 
 class nodeforLL
 {
     public:
-        char name;
+        Node * str;
         nodeforLL * next;
 
         nodeforLL()
@@ -13,9 +35,9 @@ class nodeforLL
 
         };
 
-        nodeforLL(char name)
+        nodeforLL(Node * str)
         {
-            this->name = name;
+            this->str = str;
             next = NULL;
         }
 };
@@ -25,7 +47,7 @@ class LL
     public:
         nodeforLL * head;
 
-        void append(char name)
+        void append(Node * name)
         {
             nodeforLL * n = new nodeforLL (name);
 
@@ -46,14 +68,14 @@ class LL
             temp->next = n;
         }
 
-        bool search(char name)
+        bool search(Node * N)
         {
             if(head == NULL)
             {
                 return true;
             }
 
-            if(head->name == name && head->next == NULL)
+            if(head->str->name == N->name && head->next == NULL)
             {
                 return false;
             }
@@ -62,7 +84,7 @@ class LL
 
             while(temp != NULL)
             {
-                if(temp->name == name)
+                if(temp->str->name == N->name)
                 {
                     return false;
                 }
@@ -72,6 +94,43 @@ class LL
 
             return true;
         }
+        
+        void replace(Node * scr, Node * dest)
+        {
+        	nodeforLL * temp = head;
+        	
+        	while(temp != NULL)
+        	{
+        		if(temp->str->name == scr->name)
+        		{
+        			if(temp->str->weight > dest->weight)
+        			{
+        				temp->str->weight = dest->weight;
+					}
+					
+				}
+				temp = temp->next;
+			}
+		}
+		
+		char mini()
+		{
+			char ret;			
+			
+			int min = 10;
+			
+			nodeforLL * temp = head;
+			
+			while(temp != NULL)
+			{
+				if(temp->str->weight < min)
+				{
+					ret = temp->str->name;
+				}
+			}
+			
+			return ret;
+		}
 
         void display()
         {
@@ -79,34 +138,11 @@ class LL
 
             while(temp != NULL)
             {
-                cout << temp->name << " " ;
+                cout << temp->str->name << " " << temp->str->weight << endl;
 
                 temp = temp->next;
             }
         }
-};
-
-class Node
-{
-    public:
-        int weight;
-        char name;
-        const int size = 26;
-        Node * next;
-
-        Node()
-        {
-            next = NULL;
-        };
-
-        Node(char name, int weight)
-        {
-            this->name = name;
-            this->weight = weight;
-            next = NULL;
-        }
-
-        
 };
 
 class HashTable
@@ -160,78 +196,13 @@ class HashTable
 
         void Dijstra(char starting)
         {
-            stack <char> S;
-
-            S.push('#');
-
             char change = starting;
 
-            int MstCost = 0;
-
-            LL * visited = new LL();
-
-            bool flag = false;
-
-            while(!S.empty())
-            {
-                int inx = HashFor(change);
-
-                int min = 10;
-
-                Node * temp = Table[inx];
-
-                Node * store = Table[inx];
-                
-                if(visited->search(temp->name))
-                {
-                    visited->append(temp->name);
-                    
-                    S.push(temp->name);
-                }
-
-                while(temp != NULL)
-                {
-                    if(temp->weight < min && visited->search(temp->name))
-                    {
-                        min = temp->weight;
-
-                        change = temp->name;
-                    }
-                    
-                    temp = temp->next;
-                }
-                
-                if(flag)
-                {
-                    if(change != store->name)
-                    {
-                        S.push(store->name);
-                    }
-                    flag = false;
-                }
-                
-                if(visited->search(change))
-                {
-                    MstCost += min;
-                    
-                    S.push(change);
-                    
-                    visited->append(change);
-                }
-                else
-                {
-                    flag = true;
-                    change = S.top();
-                    S.pop();
-                }
-                
-                
-            }
-            visited->display();
+            int weights[6];
             
-            cout << endl;
+            int index = HashFor(change);
             
-            cout << "The MST cost is " << MstCost << endl;
+            cout << Table[index]->weight;
         }
 };
 
@@ -255,5 +226,12 @@ int main()
     H.edgeconnection('C', 'E', 1);
     H.edgeconnection('D', 'E', 2);
 
+	Node * n1 = new Node('A', 1);
+	Node * n2 = new Node('B', 2);
+	Node * n3 = new Node('C', 3);
+	Node * n4 = new Node('D', 4);
+
+	
+	
     H.Dijstra('S');
 }
